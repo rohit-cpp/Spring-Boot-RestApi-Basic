@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Student;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.StudentRepository;
 
 @Service
@@ -26,14 +27,18 @@ public class StudentService {
     public Student getStudentById(long studentId) {
         Optional<Student> OptionalValue = this.studentRepository.findById(studentId);
 
-        return OptionalValue.orElse(null);
+        return OptionalValue
+                .orElseThrow(() -> {
+                    return new NotFoundException("Student with ID:" + studentId + "was not Found.");
+                });
+
     }
 
     public Student updateStudent(Student student) {
         Student existingStudent = this.getStudentById(student.getId());
-        if (existingStudent == null) {
-            return null;
-        }
+        // if (existingStudent == null) {
+        // return null;
+        // }
         existingStudent.setFirstName(student.getFirstName());
         existingStudent.setLastName(student.getLastName());
         return this.studentRepository.save(existingStudent);
