@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.Student;
@@ -22,19 +23,18 @@ import com.example.demo.service.StudentService;
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/student")
 public class StudentController {
-
-    private final StudentRepository studentRepository;
 
     private final StudentService studentService;
 
     @Autowired
-    public StudentController(StudentService studentService, StudentRepository studentRepository) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
+
     }
 
-    @PostMapping("/student/add")
+    @PostMapping("/add")
     public ResponseEntity<?> addStudent(@RequestBody @Valid Student student) {
         try {
             return ResponseEntity.ok(this.studentService.addStudent(student));
@@ -46,7 +46,7 @@ public class StudentController {
 
     }
 
-    @GetMapping("/student/{sId}")
+    @GetMapping("/{sId}")
     public ResponseEntity<?> getStudentById(@PathVariable(name = "sId") long studentId) {
 
         try {
@@ -61,7 +61,7 @@ public class StudentController {
 
     }
 
-    @PutMapping("/student/{studentId}")
+    @PutMapping("/{studentId}")
     public ResponseEntity<?>
 
             updateStudent(@PathVariable long studentId, @RequestBody Student student) {
@@ -80,7 +80,7 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("/student/{studentId}")
+    @DeleteMapping("/{studentId}")
     public ResponseEntity<?> deleteStudent(@PathVariable long studentId) {
 
         try {
